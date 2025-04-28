@@ -1,6 +1,6 @@
 # Elliptic curve cryptography
 
-## Practice a implementation of elliptic curve cryptography in Rust
+## Practice a implementation of elliptic-curve cryptography in Rust
 
 ### Purpose
 
