@@ -30,7 +30,8 @@ impl<F: Field> EllipticCurve<F> {
         g: Point<F>,
         n: F
     ) -> Result<Self, EllipticCurveError> {
-        // 4a^3 + 27b^2 != 0
+        let curve = Self{ a, b, g, n };
+
         let four = F::from(4u64);
         let twenty_seven = F::from(27u64);
 
@@ -39,23 +40,11 @@ impl<F: Field> EllipticCurve<F> {
             return Err(EllipticCurveError::InvalidCurveParameters);
         }
         
-
-        if !Self::check_point_on_curve(&a, &b, &g) {
+        if !curve.is_on_curve(&g) {
             return Err(EllipticCurveError::PointNotOnCurve);
         }
 
-        Ok(Self { a, b, g, n })
-    }
-
-    fn check_point_on_curve(a: &F, b: &F, point: &Point<F>) -> bool {
-        match point {
-            Point::Infinity => true,
-            Point::Affine { x, y } => {
-                let lhs = y.square();
-                let rhs = x.pow([3]) + (*a) * (*x) + (*b);
-                lhs == rhs
-            }
-        }
+        Ok(curve)
     }
 
     pub fn is_on_curve(&self, point: &Point<F>) -> bool {
