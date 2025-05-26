@@ -37,11 +37,16 @@ impl<F: Field> Point<F> {
     }
 }
 
+#[derive(PartialEq)]
 pub struct CurvePoint<C: Curve> {
     pub inner: Point<C::BaseField>,
 }
 
 impl<C: Curve> CurvePoint<C> {
+    pub fn new(x: C::BaseField, y: C::BaseField) -> Self {
+        CurvePoint { inner: Point::Affine { x, y } }
+    }
+
     pub fn infinity() -> Self {
         CurvePoint { inner: Point::Infinity }
     }

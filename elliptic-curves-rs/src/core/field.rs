@@ -23,5 +23,5 @@ pub trait Field:
 /// PrimeField -> Field
 pub trait PrimeField: Field {
     fn from_u64(n: u64) -> Self;
-    fn to_u64(self) -> u64;
+    // fn to_u64(self) -> u64;
 }
