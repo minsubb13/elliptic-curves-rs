@@ -1,6 +1,7 @@
 use std::u64;
 
-use crate::finite_fields::secp256k1::{Fq, Secp256k1Config};
+// use crate::finite_fields::secp256k1::{Fq, Secp256k1Config};
+use elliptic_curves_rs::curves::secp256k1::{Fq, Secp256k1Config};
 
 use ark_ff::{biginteger, BigInteger, BigInteger256, Field, FpConfig, MontBackend, PrimeField, Zero};
 use ark_std::{One, UniformRand};

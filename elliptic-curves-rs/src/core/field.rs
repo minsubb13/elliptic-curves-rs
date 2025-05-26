@@ -1,35 +1,30 @@
-use crate::core::traits::{ArkField, PrimeField};
-
-use ark_ff::{BigInteger, BigInteger256, Fp256, PrimeField};
+use ark_ff::{Field as ArkField, PrimeField as ArkPrimeField};
+use ark_ff::{BigInteger, BigInteger256, Fp256};
 use ark_ff::fields::{MontBackend, MontConfig};
 
-#[derive(MontConfig)]
-#[modulus = "115792089237316195423570985008687907853269984665640564039457584007908834671663"]
-#[generator = "3"]
-pub struct Secp256k1Config;
-pub type Fq = Fp256<MontBackend<Secp256k1Config, 4>>;
+use std::fmt::Debug;
 
-pub trait FieldOps: ArkField {
-    fn add(&self, other: &Self) -> Self;
-    fn sub(&self, other: &Self) -> Self;
-    fn mul(&self, other: &Self) -> Self;
-    fn inv(&self) -> Option<Self>;
+pub trait Field:
+    Copy
+    + Clone
+    + PartialEq
+    + Debug
+{
+    fn zero() -> Self;
+    fn one() -> Self;
+
+    fn add(self, other: Self) -> Self;
+    fn sub(self, other: Self) -> Self;
+    fn mul(self, other: Self) -> Self;
+    fn inv(self) -> Self;
+
+    fn neg(self) -> Self {
+        Self::zero().sub(self)
+    }
 }
-
-impl<F: PrimeField> FieldOps for F {
-    fn add(&self, other: &Self) -> Self {
-        *self + *other
-    }
-
-    fn sub(&self, other: &Self) -> Self {
-        *self - *other
-    }
-
-    fn mul(&self, other: &Self) -> Self {
-        *self * *other
-    }
-
-    fn inv(&self) -> Option<Self> {
-        self.inverse()
-    }
+/// Field를 상속받는 PrimeField
+/// PrimeField -> Field
+pub trait PrimeField: Field {
+    fn from_u64(n: u64) -> Self;
+    fn to_u64(self) -> u64;
 }

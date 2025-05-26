@@ -1,26 +1,28 @@
-use crate::curve_fn::{EllipticCurve, EllipticCurveError};
-use crate::finite_fields::secp256k1::Fq;
-use crate::point::{Point};
+use ark_ff::{BigInteger, BigInteger256, Field, Fp256, PrimeField};
+use ark_ff::fields::{MontBackend, MontConfig};
 
-pub struct Secp256k1;
+#[derive(MontConfig)]
+#[modulus = "115792089237316195423570985008687907853269984665640564039457584007908834671663"]
+#[generator = "3"]
+pub struct Secp256k1Config;
+pub type Fq = Fp256<MontBackend<Secp256k1Config, 4>>;
 
-impl Secp256k1 {
-    pub fn new() -> Result<EllipticCurve<Fq>, EllipticCurveError> {
-        let a = Fq::from(0u64);
-        let b = Fq::from(7u64);
-        
-        let g_x_hex = "79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798";
-        let g_y_hex = "483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8";
-        
-        let g = match Secp256k1Point::from_hex(g_x_hex, g_y_hex) {
-            Some(point) => point,
-            None => return Err(EllipticCurveError::InvalidCurveParameters),
-        };
-        
-        let n_hex = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141";
-        let n = Fq::from_hex(n_hex)
-            .ok_or(EllipticCurveError::InvalidCurveParameters)?;
-        
-        EllipticCurve::new(a, b, g, n)
-    }
+#[test]
+fn test_arithmetic() {
+    let a = Fq::from(123u64);
+    let b = Fq::from(456u64);
+    let c = a + b;
+    assert_eq!(c, a + b);
+
+}
+
+#[test]
+fn test_max_int() {
+    let a = Fq::from(u64::MAX);
+    let b = Fq::from(u64::MAX);
+    let c = a + b;
+    let mut a_ = a.into_bigint();
+    let mut b_ = b.into_bigint();
+    let carry = a_.add_with_carry(&b_);
+    assert_eq!(carry, false);
 }
