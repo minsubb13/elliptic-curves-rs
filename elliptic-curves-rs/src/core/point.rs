@@ -1,142 +1,57 @@
-use crate::core::traits::{Field, PrimeField, Zero};
-use crate::core::field::FieldOps;
-use std::ops::Add;
+use crate::core::field::Field;
+use crate::core::curve::Curve;
+use ark_ff::{PrimeField as ArkPrimeField};
 use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Point<F:Field> {
+pub enum Point<F: Field> {
     Infinity,
-    Affine {x: F, y: F},
+    Affine { x: F, y: F },
 }
 
 impl<F: Field> Point<F> {
-    pub fn new(x: F, y: F) -> Self {
-        Self::Affine { x, y }
-    }
-
     pub fn infinity() -> Self {
-        Self::Infinity
+        Point::Infinity
     }
 
-    pub fn x(&self) -> Option<F> {
-        match self {
-            Self::Affine {x, .. } => Some(*x),
-            Self::Infinity => None,
-        }
-    }
-
-    pub fn y(&self) -> Option<F> {
-        match self {
-            Self::Affine {y, .. } => Some(*y),
-            Self::Infinity => None,
-        }
-    }
-
-    pub fn is_infinity(&self) -> bool {
-        matches!(self, Self::Infinity)
-    }
-
-    /// addition for point
-    /// p1.add(&p2) => return new point
-    pub fn add(&self, other: &Point<F>) -> Self {
-        match (self, other) {
-            // 0 + 0 = 0
-            (Self::Infinity, Self::Infinity) => Self::Infinity,
-            // 0 + Q = Q, P + 0 = P
-            (Point::Infinity, p) | (p, Point::Infinity) => p.clone(),
-
-            (Self::Affine { x: x1, y: y1 }, Self::Affine { x: x2, y: y2 }) => {
-                Self::Affine {
-                    x: *x1 + *x2,
-                    y: *y1 + *y2,
-                }
-            }
-        }
-    }
-
-    /// doubling point
-    pub fn double_point(&self) -> Self {
-        match self {
-            Self::Infinity => Self::Infinity,
-            Self::Affine { x: x1, y: y1 } => {
-                Self::Affine {
-                    x: *x1 + *x1,
-                    y: *y1 + *y1,
-                }
-            }
-        }
+    pub fn new(x: F, y: F) -> Self {
+        Point::Affine { x, y }
     }
 }
 
-impl<F: Field> std::ops::Add for Point<F> {
-    type Output = Self;
+pub struct CurvePoint<C: Curve> {
+    pub inner: Point<C::BaseField>,
+}
 
-    fn add(self, other: Self) -> Self {
-        self.add(&other)
+impl<C: Curve> CurvePoint<C> {
+    pub fn infinity() -> Self {
+        CurvePoint { inner: Point::Infinity }
+    }
+
+    pub fn add(&self, other: &Self) -> Self {
+        let p = C::add_point(&self.inner, &other.inner);
+        CurvePoint { inner: p }
+    }
+
+    pub fn double(&self) -> Self {
+        let p = C::double_point(&self.inner);
+        CurvePoint { inner: p }
+    }
+
+    pub fn mul_scalar(&self, scalar: &<C::BaseField as ArkPrimeField>::BigInt) -> Self {
+        let p = C::mul_scalar(&self.inner, scalar);
+        CurvePoint { inner: p }
     }
 }
 
-impl<F: Field> std::ops::Add<&Point<F>> for Point<F> {
-    type Output = Self;
-
-    fn add(self, other: &Self) -> Self {
-        self.add(other)
-    }
-}
-
-impl<F: Field> std::ops::Add<Point<F>> for &Point<F> {
-    type Output = Point<F>;
-    
-    fn add(self, other: Point<F>) -> Point<F> {
-        self.add(&other)
-    }
-}
-
-impl<F: Field> std::ops::Add for &Point<F> {
-    type Output = Point<F>;
-    
-    fn add(self, other: Self) -> Point<F> {
-        self.add(other)
-    }
-}
-
-
-impl<F: Field + fmt::Display> fmt::Display for Point<F> {
+impl<C: Curve> fmt::Display for CurvePoint<C>
+where
+    C::BaseField: fmt::Display,
+{
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Self::Infinity => write!(f, "Infinity"),
-            Self::Affine { x, y } => write!(f, "({}, {})", x, y),
+        match &self.inner {
+            Point::Infinity => write!(f, "Infinity"),
+            Point::Affine { x, y } => write!(f, "({}, {})", x, y),
         }
-    }
-}
-
-
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use ark_secp256k1::Fq;
-
-    #[test]
-    fn test_point_addition() {
-        let p1 = Point::Affine {
-            x: Fq::from(1u64),
-            y: Fq::from(2u64), 
-        };
-
-        let p2 = Point::Affine {
-            x: Fq::from(3u64),
-            y: Fq::from(4u64),
-        };
-
-        let result = p1.add(&p2);
-
-        let expected = Point::Affine {
-            x: Fq::from(4u64),
-            y: Fq::from(6u64),
-        };
-
-        assert_eq!(result, expected);
-
     }
 }
