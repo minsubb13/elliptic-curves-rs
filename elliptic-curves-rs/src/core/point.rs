@@ -17,6 +17,24 @@ impl<F: Field> Point<F> {
     pub fn new(x: F, y: F) -> Self {
         Point::Affine { x, y }
     }
+
+    pub fn x(&self) -> Option<F> {
+        match self {
+            Self::Affine {x, .. } => Some(*x),
+            Self::Infinity => None,
+        }
+    }
+
+    pub fn y(&self) -> Option<F> {
+        match self {
+            Self::Affine {y, .. } => Some(*y),
+            Self::Infinity => None,
+        }
+    }
+
+    pub fn is_infinity(&self) -> bool {
+        matches!(self, Self::Infinity)
+    }
 }
 
 pub struct CurvePoint<C: Curve> {
