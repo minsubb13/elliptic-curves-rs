@@ -18,6 +18,7 @@ pub trait Field:
         Self::zero().sub(self)
     }
 }
+
 /// Field를 상속받는 PrimeField
 /// PrimeField -> Field
 pub trait PrimeField: Field {
