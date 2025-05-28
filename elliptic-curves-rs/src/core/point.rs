@@ -61,7 +61,7 @@ impl<C: Curve> CurvePoint<C> {
         CurvePoint { inner: p }
     }
 
-    pub fn mul_scalar(&self, scalar: &<C::BaseField as ArkPrimeField>::BigInt) -> Self {
+    pub fn mul_scalar(&self, scalar: &C::BaseField) -> Self {
         let p = C::mul_scalar(&self.inner, scalar);
         CurvePoint { inner: p }
     }
@@ -73,6 +73,18 @@ where
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match &self.inner {
+            Point::Infinity => write!(f, "Infinity"),
+            Point::Affine { x, y } => write!(f, "({}, {})", x, y),
+        }
+    }
+}
+
+impl<F> fmt::Display for Point<F>
+where
+    F: Field + fmt::Display,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
             Point::Infinity => write!(f, "Infinity"),
             Point::Affine { x, y } => write!(f, "({}, {})", x, y),
         }

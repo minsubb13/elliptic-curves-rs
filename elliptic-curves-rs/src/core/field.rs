@@ -9,12 +9,12 @@ pub trait Field:
     fn zero() -> Self;
     fn one() -> Self;
 
-    fn add(self, other: Self) -> Self;
-    fn sub(self, other: Self) -> Self;
-    fn mul(self, other: Self) -> Self;
-    fn inv(self) -> Self;
+    fn add(&self, other: &Self) -> Self;
+    fn sub(&self, other: &Self) -> Self;
+    fn mul(&self, other: &Self) -> Self;
+    fn inv(&self) -> Self;
 
-    fn neg(self) -> Self {
+    fn neg(&self) -> Self {
         Self::zero().sub(self)
     }
 }

@@ -12,6 +12,11 @@ pub trait Curve {
     // from_u64, to_u64와 ArkPrimeField의 함수를 구현해야 한다.
     type BaseField: PrimeField + ArkPrimeField;
 
+    fn a() -> Self::BaseField;
+    fn b() -> Self::BaseField;
+
+    fn generator() -> Point<Self::BaseField>;
+
     fn add_point(
         p: &Point<Self::BaseField>,
         q: &Point<Self::BaseField>,
@@ -21,16 +26,7 @@ pub trait Curve {
 
     fn mul_scalar(
         p: &Point<Self::BaseField>,
-        scalar: &<Self::BaseField as ArkPrimeField>::BigInt,
-    ) -> Point<Self::BaseField> {
-        let mut result = Point::infinity();
-        let mut acc = p.clone();
-        for bit in scalar.to_bits_le() {
-            if bit {
-                result = Self::add_point(&result, &acc);
-            }
-            acc = Self::double_point(&acc);
-        }
-        result
-    }
+        // scalar: &<Self::BaseField as ArkPrimeField>::BigInt,
+        scalar: &Self::BaseField,
+    ) -> Point<Self::BaseField>;
 }
