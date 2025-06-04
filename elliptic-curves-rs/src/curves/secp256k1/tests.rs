@@ -77,3 +77,18 @@ fn test_point_addition() {
     assert_eq!(two_g, expected_2g);
 }
 
+#[test]
+fn test_scalar_mul() {
+    let generator = Secp256k1Curve::generator();
+    let k = FqSecp256k1::from(2u64);
+    let three = FqSecp256k1::from(3);
+
+    let two_g_expected = generator.add(&generator);
+    let two_times_g = generator.mul_scalar(&k);
+
+    let three_g = two_g_expected.add(&generator);
+    let three_times_g = generator.mul_scalar(&three);
+
+    assert_eq!(two_times_g, two_g_expected);
+    assert_eq!(three_g, three_times_g);
+}
