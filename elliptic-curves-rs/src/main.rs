@@ -44,5 +44,8 @@ fn main() {
     let r2 = Secp256k1Curve::add_point(&a.inner, &b.inner);
     println!("{}", r2);
 
-    // let r2 = Secp256k1Curve::add_point(&p, &q);
+    let g = Secp256k1Curve::generator();
+    let two_g = g.add(&g);
+    println!("G = {}", g);
+    println!("2G = {}", two_g);
 }

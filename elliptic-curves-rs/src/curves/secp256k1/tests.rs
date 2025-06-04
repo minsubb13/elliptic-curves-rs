@@ -12,7 +12,7 @@ use ark_ff::Zero;
 use std::str::FromStr;
 
 #[test]
-fn check_parameters() {
+fn test_check_parameters() {
     // prime = 115792089237316195423570985008687907853269984665640564039457584007908834671663
     let prime = FqSecp256k1::MODULUS;
     let secp256k1_prime = BigInteger256::from_str(
@@ -43,7 +43,7 @@ fn check_parameters() {
 }
 
 #[test]
-fn basic_operations() {
+fn test_basic_operations() {
     use ark_ff::AdditiveGroup;
     use ark_std::{One, UniformRand, test_rng};
 
@@ -60,3 +60,20 @@ fn basic_operations() {
     assert_eq!(e, a.square() - b.square());
     assert_eq!(a.inverse().unwrap() * a, FqSecp256k1::one());
 }
+
+#[test]
+fn test_point_addition() {
+    let g = Secp256k1Curve::generator();
+
+    let two_gx = FqSecp256k1::from_str(
+        "89565891926547004231252920425935692360644145829622209833684329913297188986597"
+    ).unwrap();
+    let two_gy = FqSecp256k1::from_str(
+        "12158399299693830322967808612713398636155367887041628176798871954788371653930"
+    ).unwrap();
+    let expected_2g = PointSecp256k1::new(two_gx, two_gy);
+
+    let two_g = g.add(&g);
+    assert_eq!(two_g, expected_2g);
+}
+
