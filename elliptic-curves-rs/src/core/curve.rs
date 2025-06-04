@@ -1,5 +1,6 @@
 use crate::core::field::{PrimeField};
 use crate::core::point::{Point, CurvePoint};
+
 use ark_ff::{PrimeField as ArkPrimeField, BigInteger};
 
 /// PrimeField를 상속받는 Curve

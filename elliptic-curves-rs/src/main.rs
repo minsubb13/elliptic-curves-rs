@@ -1,5 +1,3 @@
-use std::u64;
-
 use elliptic_curves_rs::core::curve::Curve;
 use elliptic_curves_rs::core::field::PrimeField;
 use elliptic_curves_rs::core::point::CurvePoint;

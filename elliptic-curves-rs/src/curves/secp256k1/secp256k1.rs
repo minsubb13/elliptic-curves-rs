@@ -11,7 +11,6 @@ use ark_ff::{
     Fp256,
     Zero,
 };
-use num_traits::zero;
 
 use std::str::FromStr;
 use std::u64;

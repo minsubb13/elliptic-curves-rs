@@ -1,13 +1,13 @@
-use ark_ff::PrimeField as ArkPrimeField;
-use ark_ff:: Field as ArkField;
-use ark_ff::biginteger::BigInteger256;
-use ark_ff::Zero;
-
 use super::secp256k1::FqSecp256k1;
 use super::secp256k1::Secp256k1Curve;
 use super::secp256k1::PointSecp256k1;
 use crate::core::curve::Curve;
 use crate::core::field::PrimeField;
+
+use ark_ff::PrimeField as ArkPrimeField;
+use ark_ff:: Field as ArkField;
+use ark_ff::biginteger::BigInteger256;
+use ark_ff::Zero;
 
 use std::str::FromStr;
 
