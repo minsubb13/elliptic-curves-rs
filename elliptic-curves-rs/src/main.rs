@@ -3,9 +3,9 @@ use std::u64;
 use elliptic_curves_rs::core::curve::Curve;
 use elliptic_curves_rs::core::field::PrimeField;
 use elliptic_curves_rs::core::point::CurvePoint;
-use elliptic_curves_rs::curves::secp256k1::FqSecp256k1;
-use elliptic_curves_rs::curves::secp256k1::PointSecp256k1;
-use elliptic_curves_rs::curves::secp256k1::Secp256k1Curve;
+use elliptic_curves_rs::curves::secp256k1::secp256k1::FqSecp256k1;
+use elliptic_curves_rs::curves::secp256k1::secp256k1::PointSecp256k1;
+use elliptic_curves_rs::curves::secp256k1::secp256k1::Secp256k1Curve;
 
 use ark_ff::{
     biginteger,

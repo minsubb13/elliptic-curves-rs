@@ -1,0 +1,45 @@
+use ark_ff::MontBackend;
+use ark_ff::PrimeField as ArkPrimeField;
+use ark_ff:: Field as ArkField;
+use ark_ff::biginteger::BigInteger256;
+use ark_ff::Fp256;
+use ark_ff::Zero;
+
+use super::secp256k1::FqSecp256k1;
+use super::secp256k1::Secp256k1Curve;
+use super::secp256k1::PointSecp256k1;
+use crate::core::curve::Curve;
+use crate::core::field::PrimeField;
+
+use std::str::FromStr;
+
+#[test]
+fn check_parameters() {
+    // prime = 115792089237316195423570985008687907853269984665640564039457584007908834671663
+    let prime = FqSecp256k1::MODULUS;
+    let secp256k1_prime = BigInteger256::from_str(
+        "115792089237316195423570985008687907853269984665640564039457584007908834671663",
+    ).expect("Failed to parse modulus");
+    assert_eq!(prime, secp256k1_prime);
+    
+    // a = 0
+    // b = 7
+    let a = Secp256k1Curve::a();
+    let b  = Secp256k1Curve::b();
+    assert_eq!(a, FqSecp256k1::zero());
+    assert_eq!(b, FqSecp256k1::from_u64(7));
+
+    // generator:
+    // x: 55066263022277343669578718895168534326250603453777594175500187360389116729240
+    // y: 32670510020758816978083085130507043184471273380659243275938904335757337482424
+    let generator = Secp256k1Curve::generator();
+    let g_x = FqSecp256k1::from_str(
+        "55066263022277343669578718895168534326250603453777594175500187360389116729240",
+    ).expect("panicked at g_x");
+    let g_y = FqSecp256k1::from_str(
+        "32670510020758816978083085130507043184471273380659243275938904335757337482424",
+    ).expect("panicked at g_y");
+    let g = PointSecp256k1::new(g_x, g_y);
+    
+    assert_eq!(generator, g);
+}

@@ -1,5 +1,5 @@
 use crate::core::field::{PrimeField};
-use crate::core::point::Point;
+use crate::core::point::{Point, CurvePoint};
 use ark_ff::{PrimeField as ArkPrimeField, BigInteger};
 
 /// PrimeField를 상속받는 Curve
@@ -15,7 +15,11 @@ pub trait Curve {
     fn a() -> Self::BaseField;
     fn b() -> Self::BaseField;
 
-    fn generator() -> Point<Self::BaseField>;
+    // 곡선 타입이 compile time에 확정된 상태여야만 이 메서드를 쓸 수 있다.
+    // `where Self: Sized;`를 통해 컴파일러는 generator 호출 시점에 Self의 크기를 알 수 있다.
+    fn generator() -> CurvePoint<Self>
+    where
+        Self: Sized;
 
     fn add_point(
         p: &Point<Self::BaseField>,
@@ -26,7 +30,6 @@ pub trait Curve {
 
     fn mul_scalar(
         p: &Point<Self::BaseField>,
-        // scalar: &<Self::BaseField as ArkPrimeField>::BigInt,
         scalar: &Self::BaseField,
     ) -> Point<Self::BaseField>;
 }
