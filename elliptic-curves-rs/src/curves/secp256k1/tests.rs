@@ -1,8 +1,6 @@
-use ark_ff::MontBackend;
 use ark_ff::PrimeField as ArkPrimeField;
 use ark_ff:: Field as ArkField;
 use ark_ff::biginteger::BigInteger256;
-use ark_ff::Fp256;
 use ark_ff::Zero;
 
 use super::secp256k1::FqSecp256k1;
@@ -42,4 +40,23 @@ fn check_parameters() {
     let g = PointSecp256k1::new(g_x, g_y);
     
     assert_eq!(generator, g);
+}
+
+#[test]
+fn basic_operations() {
+    use ark_ff::AdditiveGroup;
+    use ark_std::{One, UniformRand, test_rng};
+
+    let mut rng = test_rng();
+    let a = FqSecp256k1::rand(&mut rng);
+    let b = FqSecp256k1::rand(&mut rng);
+
+    let c = a + b;
+    let d = a - b;
+
+    assert_eq!(c + d, a.double());
+
+    let e = c * d;
+    assert_eq!(e, a.square() - b.square());
+    assert_eq!(a.inverse().unwrap() * a, FqSecp256k1::one());
 }
