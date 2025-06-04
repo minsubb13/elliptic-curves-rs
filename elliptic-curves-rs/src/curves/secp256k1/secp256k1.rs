@@ -82,6 +82,12 @@ impl Curve for Secp256k1Curve {
         CurvePoint { inner: inner_affine }
     }
 
+    fn order() -> FqSecp256k1 {
+        FqSecp256k1::from_str(
+            "115792089237316195423570985008687907852837564279074904382605163141518161494337"
+        ).unwrap()
+    }
+
     fn add_point(
         p: &Point<FqSecp256k1>,
         q: &Point<FqSecp256k1>,
@@ -92,14 +98,17 @@ impl Curve for Secp256k1Curve {
             (Infinity, _) => q.clone(),
             (_, Infinity) => p.clone(),
             (Affine { x: x1, y: y1 }, Affine { x: x2, y:y2 }) => {
-                if x1 == x2 && y1 == &y2.mul(&FqSecp256k1::from_u64(u64::MAX)) {
+                // P + (-P) = infinity
+                if x1 == x2 && (y1 + y2).is_zero() {
                     return Infinity;
                 }
 
+                // P + P = 2P
                 if x1 == x2 && y1 == y2 {
                     return Self::double_point(p);
                 }
 
+                // P + Q (P != Q)
                 let m = {
                     let numerator = y1 - y2;
                     let denominator = (x1 - x2).inverse().expect("y1 != 0");

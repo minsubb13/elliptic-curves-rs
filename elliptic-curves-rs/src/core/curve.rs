@@ -22,6 +22,8 @@ pub trait Curve {
     where
         Self: Sized;
 
+    fn order() -> Self::BaseField;
+
     fn add_point(
         p: &Point<Self::BaseField>,
         q: &Point<Self::BaseField>,

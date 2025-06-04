@@ -3,6 +3,7 @@ use super::secp256k1::Secp256k1Curve;
 use super::secp256k1::PointSecp256k1;
 use crate::core::curve::Curve;
 use crate::core::field::PrimeField;
+use crate::core::point::CurvePoint;
 
 use ark_ff::PrimeField as ArkPrimeField;
 use ark_ff:: Field as ArkField;
@@ -38,8 +39,25 @@ fn test_check_parameters() {
         "32670510020758816978083085130507043184471273380659243275938904335757337482424",
     ).expect("panicked at g_y");
     let g = PointSecp256k1::new(g_x, g_y);
-    
     assert_eq!(generator, g);
+
+    // order:
+    // 115792089237316195423570985008687907852837564279074904382605163141518161494337
+    let order = Secp256k1Curve::order();
+    let expected_order = FqSecp256k1::from_str(
+        "115792089237316195423570985008687907852837564279074904382605163141518161494337"
+    ).unwrap();
+    assert_eq!(order, expected_order);
+}
+
+#[test]
+fn test_order() {
+    let g = Secp256k1Curve::generator();
+    let order = Secp256k1Curve::order();
+
+    let g_times_order = g.mul_scalar(&order);
+    let infinity = CurvePoint::<Secp256k1Curve>::infinity();
+    assert_eq!(g_times_order, infinity);
 }
 
 #[test]
@@ -72,9 +90,11 @@ fn test_point_addition() {
         "12158399299693830322967808612713398636155367887041628176798871954788371653930"
     ).unwrap();
     let expected_2g = PointSecp256k1::new(two_gx, two_gy);
+    let two_g = g.add(&g); // g + g
+    let double_g = g.double(); // doubling g
 
-    let two_g = g.add(&g);
     assert_eq!(two_g, expected_2g);
+    assert_eq!(double_g, expected_2g);
 }
 
 #[test]
