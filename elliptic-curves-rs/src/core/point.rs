@@ -1,6 +1,6 @@
 use crate::core::field::Field;
 use crate::core::curve::Curve;
-use ark_ff::{PrimeField as ArkPrimeField};
+
 use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -37,7 +37,7 @@ impl<F: Field> Point<F> {
     }
 }
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Debug)]
 pub struct CurvePoint<C: Curve> {
     pub inner: Point<C::BaseField>,
 }

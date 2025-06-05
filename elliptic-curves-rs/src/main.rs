@@ -1,11 +1,9 @@
-use std::u64;
-
 use elliptic_curves_rs::core::curve::Curve;
 use elliptic_curves_rs::core::field::PrimeField;
 use elliptic_curves_rs::core::point::CurvePoint;
-use elliptic_curves_rs::curves::secp256k1::FqSecp256k1;
-use elliptic_curves_rs::curves::secp256k1::PointSecp256k1;
-use elliptic_curves_rs::curves::secp256k1::Secp256k1Curve;
+use elliptic_curves_rs::curves::secp256k1::secp256k1::FqSecp256k1;
+use elliptic_curves_rs::curves::secp256k1::secp256k1::PointSecp256k1;
+use elliptic_curves_rs::curves::secp256k1::secp256k1::Secp256k1Curve;
 
 use ark_ff::{
     biginteger,
@@ -46,5 +44,8 @@ fn main() {
     let r2 = Secp256k1Curve::add_point(&a.inner, &b.inner);
     println!("{}", r2);
 
-    // let r2 = Secp256k1Curve::add_point(&p, &q);
+    let g = Secp256k1Curve::generator();
+    let two_g = g.add(&g);
+    println!("G = {}", g);
+    println!("2G = {}", two_g);
 }
