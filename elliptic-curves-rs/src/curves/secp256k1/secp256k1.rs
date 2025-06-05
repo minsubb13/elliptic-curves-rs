@@ -4,8 +4,6 @@ use crate::core::point::{Point, CurvePoint};
 
 use ark_ff::{
     fields::{MontBackend, MontConfig},
-    BigInteger,
-    BigInteger256,
     Field as ArkField,
     PrimeField as ArkPrimeField,
     Fp256,

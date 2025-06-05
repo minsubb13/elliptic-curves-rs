@@ -62,7 +62,9 @@ fn test_order() {
 }
 
 #[test]
-fn test_adding_point_at_infinity() {
+fn test_add_infinity_point() {
+    // P + infinity = P
+    // infinity + P = P
     let g = Secp256k1Curve::generator();
     let infinity = PointSecp256k1::infinity();
 
@@ -77,11 +79,10 @@ fn test_adding_point_at_infinity() {
 fn test_basic_operations() {
     use ark_ff::AdditiveGroup;
     use ark_std::{One, UniformRand, test_rng};
-
     let mut rng = test_rng();
+
     let a = FqSecp256k1::rand(&mut rng);
     let b = FqSecp256k1::rand(&mut rng);
-
     let c = a + b;
     let d = a - b;
 
@@ -95,15 +96,15 @@ fn test_basic_operations() {
 #[test]
 fn test_point_addition() {
     let g = Secp256k1Curve::generator();
-
     let two_gx = FqSecp256k1::from_str(
         "89565891926547004231252920425935692360644145829622209833684329913297188986597"
     ).unwrap();
     let two_gy = FqSecp256k1::from_str(
         "12158399299693830322967808612713398636155367887041628176798871954788371653930"
     ).unwrap();
+
     let expected_2g = PointSecp256k1::new(two_gx, two_gy);
-    let two_g = g.add(&g); // g + g
+    let two_g = g.add(&g); // g + g = 2g
     let double_g = g.double(); // doubling g
 
     assert_eq!(two_g, expected_2g);

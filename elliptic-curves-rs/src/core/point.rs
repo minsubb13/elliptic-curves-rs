@@ -1,7 +1,6 @@
 use crate::core::field::Field;
 use crate::core::curve::Curve;
 
-use ark_ff::{PrimeField as ArkPrimeField};
 use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
