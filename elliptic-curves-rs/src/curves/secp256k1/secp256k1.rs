@@ -111,7 +111,8 @@ impl Curve for Secp256k1Curve {
                 // P + Q (P != Q)
                 let m = {
                     let numerator = y1 - y2;
-                    let denominator = (x1 - x2).inverse().expect("y1 != 0");
+                    let denominator = (x1 - x2).inverse()
+                        .expect("denominator is zero.");
                     numerator * denominator
                 };
                 let x_r = m.square() - x1 - x2;
@@ -130,7 +131,8 @@ impl Curve for Secp256k1Curve {
                 let two = FqSecp256k1::from_u64(2);
                 let three = FqSecp256k1::from_u64(3);
                 let numerator = three * x.square() + Self::a();
-                let denominator = (two * y).inverse().expect("y1 != 0");
+                let denominator = (two * y).inverse()
+                    .expect("denominator is zero.");
                 let m = numerator * denominator;
                 let x_r = m.square() - x - x;
                 let y_r = m * (x - &x_r) - y;

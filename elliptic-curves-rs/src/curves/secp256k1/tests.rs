@@ -52,12 +52,25 @@ fn test_check_parameters() {
 
 #[test]
 fn test_order() {
+    // generator * order = infinity
     let g = Secp256k1Curve::generator();
     let order = Secp256k1Curve::order();
 
     let g_times_order = g.mul_scalar(&order);
     let infinity = CurvePoint::<Secp256k1Curve>::infinity();
     assert_eq!(g_times_order, infinity);
+}
+
+#[test]
+fn test_adding_point_at_infinity() {
+    let g = Secp256k1Curve::generator();
+    let infinity = PointSecp256k1::infinity();
+
+    let g_add_infinity = g.add(&infinity);
+    let infinity_add_g = infinity.add(&g);
+
+    assert_eq!(g, g_add_infinity);
+    assert_eq!(g_add_infinity, infinity_add_g);
 }
 
 #[test]
