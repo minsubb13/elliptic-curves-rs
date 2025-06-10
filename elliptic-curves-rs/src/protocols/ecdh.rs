@@ -1,6 +1,7 @@
-use crate::core::curve::Curve;
+use crate::{core::curve::Curve, curves::secp256k1::secp256k1::Secp256k1ScalarConfig};
 use crate::core::point::CurvePoint;
 use ark_std::{UniformRand, test_rng};
+use ark_ff::{biginteger, PrimeField};
 
 /// ECDH 프로토콜은 상태를 가지기보단 연산을 수행하는 역할이므로, 상태를 저장하는
 /// 필드가 필요 없음. 이럴 때 PhantomData를 사용하는 것이 rust의 일반적인 패턴
@@ -16,15 +17,13 @@ pub struct Ecdh<C: Curve> {
 }
 
 impl<C: Curve> Ecdh<C> {
-    pub fn generate_keypair() -> (C::BaseField, CurvePoint<C>) {
+    pub fn generate_keypair() -> (C::ScalarField, CurvePoint<C>) {
         let mut rng = test_rng();
-        let random_integer = C::BaseField::rand(&mut rng);
-        let order: C::BaseField = C::order();
         let g: CurvePoint<C> = C::generator();
 
         // private key is a random integer d chosen from {1, ..., n-1}
-        // (n is the order of subgroup)
-        let private_key = random_integer / order;
+        // (n is the order of the subgroup)
+        let private_key = C::ScalarField::rand(&mut rng);
         // public key is the point H = dG
         let public_key = g.mul_scalar(&private_key);
 
@@ -32,7 +31,7 @@ impl<C: Curve> Ecdh<C> {
     }
 
     pub fn compute_shared_secret(
-        private_key: &C::BaseField,
+        private_key: &C::ScalarField,
         other_public_key: &CurvePoint<C>,
     ) -> CurvePoint<C> {
         let shared = other_public_key.mul_scalar(&private_key);

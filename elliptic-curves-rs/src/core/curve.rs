@@ -2,6 +2,7 @@ use crate::core::field::{PrimeField};
 use crate::core::point::{Point, CurvePoint};
 
 use ark_ff::{PrimeField as ArkPrimeField};
+use num_bigint::BigInt;
 
 /// PrimeField를 상속받는 Curve
 /// Curve (BaseField) -> PrimeField -> Field
@@ -12,6 +13,7 @@ pub trait Curve {
     // trait을 모두 구현해야 한다. 즉, PrimeField의 두 함수
     // from_u64, to_u64와 ArkPrimeField의 함수를 구현해야 한다.
     type BaseField: PrimeField + ArkPrimeField;
+    type ScalarField: ArkPrimeField;
 
     fn a() -> Self::BaseField;
     fn b() -> Self::BaseField;
@@ -22,7 +24,7 @@ pub trait Curve {
     where
         Self: Sized;
 
-    fn order() -> Self::BaseField;
+    fn order() -> <Self::ScalarField as ArkPrimeField>::BigInt;
 
     fn add_point(
         p: &Point<Self::BaseField>,
@@ -33,6 +35,6 @@ pub trait Curve {
 
     fn mul_scalar(
         p: &Point<Self::BaseField>,
-        scalar: &Self::BaseField,
+        scalar: &Self::ScalarField,
     ) -> Point<Self::BaseField>;
 }
