@@ -13,7 +13,7 @@ pub struct Ecdh<C: Curve> {
     // 사용되지 않음에도 불구하고 존재해야만 하는 표식 필드
     // 코드를 한번만 작성하되, C:::generator() 등의 곡선 구체 타입별 정적 메서드를
     // 호출하여 ECDH를 수행하려는 목적
-    _curve: core::marker::PhantomData<C>,
+    _curve: std::marker::PhantomData<C>,
 }
 
 impl<C: Curve> Ecdh<C> {
