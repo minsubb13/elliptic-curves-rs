@@ -5,17 +5,6 @@ use elliptic_curves_rs::curves::secp256k1::secp256k1::FqSecp256k1;
 use elliptic_curves_rs::curves::secp256k1::secp256k1::PointSecp256k1;
 use elliptic_curves_rs::curves::secp256k1::secp256k1::Secp256k1Curve;
 
-use ark_ff::{
-    biginteger,
-    BigInteger,
-    BigInteger256,
-    Field as ArkField,
-    PrimeField as ArkPrimeField,
-    FpConfig,
-    MontBackend,
-    Zero};
-use ark_std::{One, UniformRand};
-
 fn main() {
     let p = PointSecp256k1::new(
         FqSecp256k1::from_u64(1),

@@ -61,7 +61,7 @@ impl<C: Curve> CurvePoint<C> {
         CurvePoint { inner: p }
     }
 
-    pub fn mul_scalar(&self, scalar: &C::BaseField) -> Self {
+    pub fn mul_scalar(&self, scalar: &C::ScalarField) -> Self {
         let p = C::mul_scalar(&self.inner, scalar);
         CurvePoint { inner: p }
     }

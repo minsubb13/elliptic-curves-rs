@@ -13,12 +13,20 @@ use ark_ff::{
 use std::str::FromStr;
 use std::u64;
 
+// Struct related to secp256k1 prime
 #[derive(MontConfig, PartialEq, Debug)]
 #[modulus = "115792089237316195423570985008687907853269984665640564039457584007908834671663"]
 #[generator = "1"]
 pub struct Secp256k1Curve;
 pub type FqSecp256k1 = Fp256<MontBackend<Secp256k1Curve, 4>>;
 pub type PointSecp256k1 = CurvePoint<Secp256k1Curve>;
+
+// Struct related to secp256k1 subgroup order
+#[derive(MontConfig, PartialEq, Debug)]
+#[modulus = "115792089237316195423570985008687907852837564279074904382605163141518161494337"]
+#[generator = "1"]
+pub struct Secp256k1ScalarConfig;
+pub type FrSecp256k1 = Fp256<MontBackend<Secp256k1ScalarConfig, 4>>;
 
 impl Field for FqSecp256k1 {
     fn zero() -> Self {
@@ -59,6 +67,7 @@ impl PrimeField for FqSecp256k1 {
 
 impl Curve for Secp256k1Curve {
     type BaseField = FqSecp256k1;
+    type ScalarField = FrSecp256k1;
 
     fn a() -> FqSecp256k1 {
         FqSecp256k1::from_u64(0)
@@ -80,10 +89,8 @@ impl Curve for Secp256k1Curve {
         CurvePoint { inner: inner_affine }
     }
 
-    fn order() -> FqSecp256k1 {
-        FqSecp256k1::from_str(
-            "115792089237316195423570985008687907852837564279074904382605163141518161494337"
-        ).unwrap()
+    fn order() -> <Self::ScalarField as ArkPrimeField>::BigInt {
+        FrSecp256k1::MODULUS
     }
 
     fn add_point(
@@ -141,7 +148,7 @@ impl Curve for Secp256k1Curve {
 
     fn mul_scalar(
         p: &Point<FqSecp256k1>,
-        scalar: &FqSecp256k1,
+        scalar: &FrSecp256k1,
     ) -> Point<FqSecp256k1> {
         let mut result = Point::infinity();
         let acc = p.clone();

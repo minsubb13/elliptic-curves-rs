@@ -1,20 +1,26 @@
 use super::secp256k1::FqSecp256k1;
 use super::secp256k1::Secp256k1Curve;
 use super::secp256k1::PointSecp256k1;
+use super::secp256k1::FrSecp256k1;
 use crate::core::curve::Curve;
 use crate::core::field::PrimeField;
 use crate::core::point::CurvePoint;
+use crate::curves::secp256k1::secp256k1::Secp256k1ScalarConfig;
 
+use ark_ff::BigInt;
+use ark_ff::MontConfig;
 use ark_ff::PrimeField as ArkPrimeField;
 use ark_ff:: Field as ArkField;
 use ark_ff::biginteger::BigInteger256;
 use ark_ff::Zero;
+use ark_secp256k1::FqConfig;
 
 use std::str::FromStr;
 
 #[test]
 fn test_check_parameters() {
-    // prime = 115792089237316195423570985008687907853269984665640564039457584007908834671663
+    // prime:
+    // 115792089237316195423570985008687907853269984665640564039457584007908834671663
     let prime = FqSecp256k1::MODULUS;
     let secp256k1_prime = BigInteger256::from_str(
         "115792089237316195423570985008687907853269984665640564039457584007908834671663",
@@ -44,21 +50,10 @@ fn test_check_parameters() {
     // order:
     // 115792089237316195423570985008687907852837564279074904382605163141518161494337
     let order = Secp256k1Curve::order();
-    let expected_order = FqSecp256k1::from_str(
+    let expected_order = BigInt::from_str(
         "115792089237316195423570985008687907852837564279074904382605163141518161494337"
     ).unwrap();
     assert_eq!(order, expected_order);
-}
-
-#[test]
-fn test_order() {
-    // generator * order = infinity
-    let g = Secp256k1Curve::generator();
-    let order = Secp256k1Curve::order();
-
-    let g_times_order = g.mul_scalar(&order);
-    let infinity = CurvePoint::<Secp256k1Curve>::infinity();
-    assert_eq!(g_times_order, infinity);
 }
 
 #[test]
@@ -114,8 +109,8 @@ fn test_point_addition() {
 #[test]
 fn test_scalar_mul() {
     let generator = Secp256k1Curve::generator();
-    let k = FqSecp256k1::from(2u64);
-    let three = FqSecp256k1::from(3);
+    let k = FrSecp256k1::from(2u64);
+    let three = FrSecp256k1::from(3);
 
     let two_g_expected = generator.add(&generator);
     let two_times_g = generator.mul_scalar(&k);
