@@ -1,5 +1,3 @@
-use std::iter::Scan;
-
 use crate::core::curve::Curve;
 use crate::core::point::CurvePoint;
 
@@ -28,11 +26,11 @@ impl<C: Curve> Ecdsa<C> {
             let r = match p.inner.x() {
                 Some(x_base) => {
                     let bytes = x_base.into_bigint().to_bytes_be();
-                    let r_candinate = C::ScalarField::from_be_bytes_mod_order(&bytes);
-                    if r_candinate.is_zero() {
+                    let r_candidate = C::ScalarField::from_be_bytes_mod_order(&bytes);
+                    if r_candidate.is_zero() {
                         continue;
                     }
-                    r_candinate
+                    r_candidate
                 }
                 None => continue,
             };
@@ -72,7 +70,6 @@ impl<C: Curve> Ecdsa<C> {
                 return x_scalar == r;
             }
         }
-
         // if s.inverse() was None, or P was infinity, or x_conversion failed
         false
     }
