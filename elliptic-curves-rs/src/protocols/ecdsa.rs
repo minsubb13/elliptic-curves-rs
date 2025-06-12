@@ -1,3 +1,5 @@
+use std::iter::Scan;
+
 use crate::core::curve::Curve;
 use crate::core::point::CurvePoint;
 
@@ -17,36 +19,32 @@ impl<C: Curve> Ecdsa<C> {
         z: C::ScalarField,
     ) -> (C::ScalarField, C::ScalarField) {
         let mut rng = thread_rng();
-        let k = C::ScalarField::rand(&mut rng);
         let generator = C::generator();
 
-        let r: C::ScalarField = loop {
+        loop {
+            let k = C::ScalarField::rand(&mut rng);
             let p = generator.mul_scalar(&k);
-            if let Some(x_base) = p.inner.x() {
-                let repr = x_base.into_bigint();
-                let bytes = repr.to_bytes_be();
+            
+            let r = match p.inner.x() {
+                Some(x_base) => {
+                    let bytes = x_base.into_bigint().to_bytes_be();
+                    let r_candinate = C::ScalarField::from_be_bytes_mod_order(&bytes);
+                    if r_candinate.is_zero() {
+                        continue;
+                    }
+                    r_candinate
+                }
+                None => continue,
+            };
 
-                let r_candidate = C::ScalarField::from_be_bytes_mod_order(&bytes);
+            if let Some(k_inv) = k.inverse() {
+                let s = k_inv * (z + r * private_key);
 
-                if r_candidate != C::ScalarField::zero() {
-                    break r_candidate;
+                if !s.is_zero() {
+                    return (r, s);
                 }
             }
-        };
-
-        let s: C::ScalarField = loop {
-            let k_inverse = k.inverse();
-            if let Some(element) = k_inverse {
-                let temp_term = z + r * private_key;
-                let right_term = element * temp_term;
-
-                if right_term != C::ScalarField::zero() {
-                    break right_term;
-                }
-            }
-        };
-
-        (r, s)        
+        }
     }
 
     pub fn verifying_message(
