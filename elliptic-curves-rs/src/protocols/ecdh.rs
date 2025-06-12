@@ -1,7 +1,11 @@
-use crate::{core::curve::Curve, curves::secp256k1::secp256k1::Secp256k1ScalarConfig};
+use crate::core::curve::Curve;
 use crate::core::point::CurvePoint;
-use ark_std::{UniformRand, test_rng};
-use ark_ff::{biginteger, PrimeField};
+
+use ark_ff::Zero;
+use ark_std::{
+    UniformRand,
+    rand::thread_rng,
+};
 
 /// ECDH 프로토콜은 상태를 가지기보단 연산을 수행하는 역할이므로, 상태를 저장하는
 /// 필드가 필요 없음. 이럴 때 PhantomData를 사용하는 것이 rust의 일반적인 패턴
@@ -18,12 +22,15 @@ pub struct Ecdh<C: Curve> {
 
 impl<C: Curve> Ecdh<C> {
     pub fn generate_keypair() -> (C::ScalarField, CurvePoint<C>) {
-        let mut rng = test_rng();
+        let mut rng = thread_rng();
         let g: CurvePoint<C> = C::generator();
 
         // private key is a random integer d chosen from {1, ..., n-1}
         // (n is the order of the subgroup)
-        let private_key = C::ScalarField::rand(&mut rng);
+        let private_key = loop {
+            let d = C::ScalarField::rand(&mut rng);
+            if d != C::ScalarField::zero() { break d }
+        };
         // public key is the point H = dG
         let public_key = g.mul_scalar(&private_key);
 

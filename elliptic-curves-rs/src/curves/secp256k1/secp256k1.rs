@@ -34,7 +34,7 @@ impl Field for FqSecp256k1 {
     }
 
     fn one() -> Self {
-        <Fp256<MontBackend<Secp256k1Curve, 4>>>::one()
+        ark_ff::One::one()
     }
 
     fn add(&self, other: &Self) -> Self {

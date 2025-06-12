@@ -4,16 +4,12 @@ use super::secp256k1::PointSecp256k1;
 use super::secp256k1::FrSecp256k1;
 use crate::core::curve::Curve;
 use crate::core::field::PrimeField;
-use crate::core::point::CurvePoint;
-use crate::curves::secp256k1::secp256k1::Secp256k1ScalarConfig;
 
 use ark_ff::BigInt;
-use ark_ff::MontConfig;
 use ark_ff::PrimeField as ArkPrimeField;
 use ark_ff:: Field as ArkField;
 use ark_ff::biginteger::BigInteger256;
 use ark_ff::Zero;
-use ark_secp256k1::FqConfig;
 
 use std::str::FromStr;
 
