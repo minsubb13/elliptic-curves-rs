@@ -12,6 +12,7 @@ fn test_ecdsa_secp256k1() {
         Ecdh::<Secp256k1Curve>::generate_keypair();
     let (bob_private_key, bob_public_key) = 
         Ecdh::<Secp256k1Curve>::generate_keypair();
+
     assert_ne!(alice_private_key, bob_private_key);
     assert_ne!(alice_public_key, bob_public_key);
 
