@@ -13,7 +13,7 @@ fn test_ecdsa_secp256k1() {
     let (bob_private_key, bob_public_key) =
         Ecdh::<Secp256k1Curve>::generate_keypair();
     
-    // Alice and Bob's key should be different
+    // Alice's and Bob's keys should be different
     assert_ne!(alice_public_key, bob_public_key);
     assert_ne!(alice_private_key, bob_private_key);
 
@@ -25,13 +25,13 @@ fn test_ecdsa_secp256k1() {
     let signature =
         Ecdsa::<Secp256k1Curve>::signing_message(&alice_private_key, z);
     
-    assert!(Ecdsa::<Secp256k1Curve>::verifying_message( // true
+    assert!(Ecdsa::<Secp256k1Curve>::verifying_message(
         &alice_public_key, z, &signature
     ));
-    assert!(!Ecdsa::<Secp256k1Curve>::verifying_message( // false
+    assert!(!Ecdsa::<Secp256k1Curve>::verifying_message(
         &alice_public_key, wrong_z, &signature
     ));
-    assert!(!Ecdsa::<Secp256k1Curve>::verifying_message( // false
+    assert!(!Ecdsa::<Secp256k1Curve>::verifying_message(
         &bob_public_key, z, &signature
     ));
 }
