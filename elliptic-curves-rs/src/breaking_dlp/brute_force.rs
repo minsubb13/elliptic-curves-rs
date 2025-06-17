@@ -18,7 +18,7 @@ impl<C: Curve> DiscreteLog<C> for BruteForce {
             p: &CurvePoint<C>,
             q: &CurvePoint<C>,
         ) -> (u16, C::ScalarField) {
-        if !C::is_on_curve(&p.inner) && !C::is_on_curve(&q.inner) {
+        if !C::is_on_curve(&p.inner) || !C::is_on_curve(&q.inner) {
             panic!("p or q are not on curve");
         }
 

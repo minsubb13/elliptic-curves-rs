@@ -10,7 +10,7 @@ use crate::curves::secp256k1::secp256k1::{
 use ark_std::{UniformRand, rand::thread_rng};
 
 #[test]
-#[ignore = "It takes very long time"]
+#[ignore = "It takes a very long time"]
 fn test_brute_force_in_secp256k1() {
     let mut rng = thread_rng();
     let random_integer = FrSecp256k1::rand(&mut rng);
