@@ -85,6 +85,13 @@ fn test_basic_operations() {
 }
 
 #[test]
+fn test_is_on_curve() {
+    let g = Secp256k1Curve::generator();
+    let is_on_curve = Secp256k1Curve::is_on_curve(&g.inner);
+    assert!(is_on_curve);
+}
+
+#[test]
 fn test_point_addition() {
     let g = Secp256k1Curve::generator();
     let two_gx = FqSecp256k1::from_str(

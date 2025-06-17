@@ -37,7 +37,7 @@ impl<F: Field> Point<F> {
     }
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 pub struct CurvePoint<C: Curve> {
     pub inner: Point<C::BaseField>,
 }
