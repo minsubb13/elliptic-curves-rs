@@ -25,6 +25,8 @@ pub trait Curve {
 
     fn order() -> <Self::ScalarField as ArkPrimeField>::BigInt;
 
+    fn is_on_curve(p: &Point<Self::BaseField>) -> bool;
+
     fn add_point(
         p: &Point<Self::BaseField>,
         q: &Point<Self::BaseField>,

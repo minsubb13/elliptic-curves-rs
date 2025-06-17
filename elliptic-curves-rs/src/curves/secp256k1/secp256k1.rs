@@ -93,6 +93,20 @@ impl Curve for Secp256k1Curve {
         FrSecp256k1::MODULUS
     }
 
+    fn is_on_curve(p: &Point<FqSecp256k1>) -> bool {
+        let a = Secp256k1Curve::a();
+        let b = Secp256k1Curve::b();
+        // y^2 = x^3 + ax + b
+        match (p.x(), p.y()) {
+            (Some(x), Some(y)) => {
+                let left_term = y.square();
+                let right_term = x.pow([3u64]) + a * x + b;
+                left_term == right_term
+            }
+            _ => true,
+        }
+    }
+
     fn add_point(
         p: &Point<FqSecp256k1>,
         q: &Point<FqSecp256k1>,
