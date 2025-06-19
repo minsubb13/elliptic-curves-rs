@@ -10,7 +10,7 @@
 
 use crate::breaking_dlp::DiscreteLog;
 use crate::core::curve::Curve;
-use crate::core::point::{Point, CurvePoint};
+use crate::core::point::CurvePoint;
 
 // TODO: Implement the Baby-step Giant-step (BSGS) algorithm for
 // solving the Discrete Logarithm Problem. This requires defining
