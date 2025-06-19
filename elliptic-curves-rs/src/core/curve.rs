@@ -38,4 +38,11 @@ pub trait Curve {
         p: &Point<Self::BaseField>,
         scalar: &Self::ScalarField,
     ) -> Point<Self::BaseField>;
+
+    fn subtract_point(
+        p: &Point<Self::BaseField>,
+        q: &Point<Self::BaseField>,
+    ) -> Point<Self::BaseField>;
+
+    fn negate_point(p: &Point<Self::BaseField>) -> Point<Self::BaseField>;
 }

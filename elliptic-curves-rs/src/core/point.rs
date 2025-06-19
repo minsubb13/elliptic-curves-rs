@@ -56,6 +56,11 @@ impl<C: Curve> CurvePoint<C> {
         CurvePoint { inner: p }
     }
 
+    pub fn subtract(&self, other: &Self) -> Self {
+        let p = C::subtract_point(&self.inner, &other.inner);
+        CurvePoint { inner: p }
+    }
+
     pub fn double(&self) -> Self {
         let p = C::double_point(&self.inner);
         CurvePoint { inner: p }

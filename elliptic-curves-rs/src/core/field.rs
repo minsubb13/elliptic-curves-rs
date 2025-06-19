@@ -13,10 +13,7 @@ pub trait Field:
     fn sub(&self, other: &Self) -> Self;
     fn mul(&self, other: &Self) -> Self;
     fn inv(&self) -> Self;
-
-    fn neg(&self) -> Self {
-        Self::zero().sub(self)
-    }
+    fn neg(&self) -> Self;
 }
 
 /// Field를 상속받는 PrimeField

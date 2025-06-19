@@ -110,6 +110,19 @@ fn test_point_addition() {
 }
 
 #[test]
+fn test_point_subtract() {
+    let g = Secp256k1Curve::generator();
+    let two_g = g.double();
+    let two_g_minus_g = two_g.subtract(&g);
+    
+    let infinity = PointSecp256k1::infinity();
+    let g_minus_g = g.subtract(&g);
+
+    assert_eq!(g, two_g_minus_g);
+    assert_eq!(infinity, g_minus_g);
+}
+
+#[test]
 fn test_scalar_mul() {
     let generator = Secp256k1Curve::generator();
     let k = FrSecp256k1::from(2u64);
