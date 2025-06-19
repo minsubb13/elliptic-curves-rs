@@ -8,6 +8,10 @@
 //! complexity. This would need approximately 10^30 bytes of memory.
 //! Therefore, BSGS is not suitable to break DLP in real world.
 
+use crate::breaking_dlp::DiscreteLog;
+use crate::core::curve::Curve;
+use crate::core::point::{Point, CurvePoint};
+
 // TODO: Implement the Baby-step Giant-step (BSGS) algorithm for
 // solving the Discrete Logarithm Problem. This requires defining
 // the necessary imports and implementing the `DiscreteLog` trait for
@@ -15,3 +19,12 @@
 // currently impractical for real-world cryptographic curves due to its
 // high memory and time complexity.
 pub struct BabyStepGiantStep;
+
+impl<C: Curve> DiscreteLog<C> for BabyStepGiantStep {
+    fn solve(
+            p: &CurvePoint<C>,
+            q: &CurvePoint<C>,
+        ) -> (u16, <C as Curve>::ScalarField) {
+        unimplemented!()
+    }
+}
