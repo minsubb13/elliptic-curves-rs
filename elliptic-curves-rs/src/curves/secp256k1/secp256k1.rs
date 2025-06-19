@@ -52,6 +52,10 @@ impl Field for FqSecp256k1 {
     fn inv(&self) -> Self {
         self.inverse().unwrap()
     }
+
+    fn neg(&self) -> Self {
+        -*self
+    }
 }
 
 impl PrimeField for FqSecp256k1 {
@@ -176,5 +180,23 @@ impl Curve for Secp256k1Curve {
             }
         }
         result
+    }
+
+    fn subtract_point(
+            p: &Point<FqSecp256k1>,
+            q: &Point<FqSecp256k1>,
+        ) -> Point<FqSecp256k1> {
+        let neg_q = Self::negate_point(q);
+        Self::add_point(p, &neg_q)
+    }
+
+    fn negate_point(p: &Point<FqSecp256k1>) -> Point<FqSecp256k1> {
+        match p {
+            Point::Infinity => Point::Infinity,
+            Point::Affine { x, y } => Point::Affine {
+                x: *x,
+                y: y.neg()
+            },
+        }
     }
 }
