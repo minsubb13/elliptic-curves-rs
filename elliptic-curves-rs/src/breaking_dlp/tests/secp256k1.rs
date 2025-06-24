@@ -1,10 +1,9 @@
 use crate::breaking_dlp::brute_force::BruteForce;
 use crate::breaking_dlp::pollards_rho::PollardsRho;
-use crate::breaking_dlp::{pollards_rho, DiscreteLog};
+use crate::breaking_dlp::DiscreteLog;
 use crate::core::curve::Curve;
 use crate::curves::secp256k1::secp256k1::{
     Secp256k1Curve,
-    FqSecp256k1,
     FrSecp256k1,
 };
 
