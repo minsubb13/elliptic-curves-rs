@@ -37,7 +37,7 @@ impl<F: Field> Point<F> {
     }
 }
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(Debug, Eq)]
 pub struct CurvePoint<C: Curve> {
     pub inner: Point<C::BaseField>,
 }
@@ -69,6 +69,20 @@ impl<C: Curve> CurvePoint<C> {
     pub fn mul_scalar(&self, scalar: &C::ScalarField) -> Self {
         let p = C::mul_scalar(&self.inner, scalar);
         CurvePoint { inner: p }
+    }
+}
+
+impl<C: Curve> Clone for CurvePoint<C> {
+    fn clone(&self) -> Self {
+        CurvePoint {
+            inner: self.inner.clone(),
+        }
+    }
+}
+
+impl<C: Curve> PartialEq for CurvePoint<C> {
+    fn eq(&self, other: &Self) -> bool {
+        self.inner == other.inner
     }
 }
 

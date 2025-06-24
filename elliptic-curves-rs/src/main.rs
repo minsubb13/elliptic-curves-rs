@@ -7,6 +7,7 @@ use elliptic_curves_rs::curves::secp256k1::secp256k1::PointSecp256k1;
 use elliptic_curves_rs::curves::secp256k1::secp256k1::Secp256k1Curve;
 
 use elliptic_curves_rs::breaking_dlp::brute_force::BruteForce;
+use elliptic_curves_rs::breaking_dlp::pollards_rho::PollardsRho;
 use elliptic_curves_rs::breaking_dlp::DiscreteLog;
 
 use ark_std::{UniformRand, rand::thread_rng};
@@ -44,12 +45,20 @@ fn main() {
     // println!("2G = {}", two_g);
     
     let mut rng = thread_rng();
-    let random_integer = FrSecp256k1::rand(&mut rng);
+    // let random_integer = FrSecp256k1::rand(&mut rng);
     
-    let g = Secp256k1Curve::generator();
-    let two = FrSecp256k1::from(2);
-    let q = g.mul_scalar(&two);
+    // let g = Secp256k1Curve::generator();
+    // let two = FrSecp256k1::from(2);
+    // let q = g.mul_scalar(&two);
 
-    let (steps, logarithm) = BruteForce::solve(&g, &q);
-    println!("steps: {}, logarithm: {}", steps, logarithm);
+    // let (steps, logarithm) = BruteForce::solve(&g, &q);
+    // println!("steps: {}, logarithm: {}", steps, logarithm);
+
+    let g = Secp256k1Curve::generator();
+    let k = FrSecp256k1::from(12345u64);
+    let q = g.mul_scalar(&k);
+
+    let (steps, found_k) = PollardsRho::solve(&g, &q);
+    println!("Found discrete log in {} steps", steps);
+    println!("steps: {}, logarithm: {}", steps, found_k);
 }

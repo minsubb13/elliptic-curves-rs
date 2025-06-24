@@ -17,7 +17,7 @@ impl<C: Curve> DiscreteLog<C> for BruteForce {
     fn solve(
             p: &CurvePoint<C>,
             q: &CurvePoint<C>,
-        ) -> (u16, C::ScalarField) {
+        ) -> (u64, C::ScalarField) {
         if !C::is_on_curve(&p.inner) || !C::is_on_curve(&q.inner) {
             panic!("p or q are not on curve");
         }
@@ -25,7 +25,7 @@ impl<C: Curve> DiscreteLog<C> for BruteForce {
         let mut rng = thread_rng();
         let start = C::ScalarField::rand(&mut rng);
         let mut current = start;
-        let end = u16::MAX;
+        let end = u64::MAX;
 
         for steps in 0..end {
             let result = p.mul_scalar(&current);
