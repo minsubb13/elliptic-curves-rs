@@ -24,7 +24,7 @@ impl<C: Curve> DiscreteLog<C> for BabyStepGiantStep {
     fn solve(
             p: &CurvePoint<C>,
             q: &CurvePoint<C>,
-        ) -> (u16, <C as Curve>::ScalarField) {
+        ) -> (u64, <C as Curve>::ScalarField) {
         unimplemented!()
     }
 }
