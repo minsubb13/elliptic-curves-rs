@@ -15,5 +15,5 @@ pub trait DiscreteLog<C: Curve> {
     fn solve(
         p: &CurvePoint<C>,
         q: &CurvePoint<C>,
-    ) -> (u16, C::ScalarField); // (steps, logarithm)
+    ) -> (u64, C::ScalarField); // (steps, logarithm)
 }
