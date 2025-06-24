@@ -13,16 +13,18 @@ use ark_std::{UniformRand, rand::thread_rng};
 #[ignore = "It takes a very long time"]
 fn test_brute_force_in_secp256k1() {
     let mut rng = thread_rng();
-    let random_integer = FrSecp256k1::rand(&mut rng);
+    let x = FrSecp256k1::rand(&mut rng);
 
     let g = Secp256k1Curve::generator();
-    let q = g.mul_scalar(&random_integer);
+    let q = g.mul_scalar(&x);
 
     let (steps, logarithm) = BruteForce::solve(&g, &q);
     println!("steps: {}, logarithm: {}", steps, logarithm);
+    assert_eq!(x, logarithm);
 }
 
 #[test]
+#[ignore = "It takes a very long time"]
 fn test_pollards_rho_in_secp256k1() {
     let g = Secp256k1Curve::generator();
     let k = FrSecp256k1::from(50u64);
