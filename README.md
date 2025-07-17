@@ -7,11 +7,11 @@ This repository is for:
 
 - **Practice Implementing ECC Theory**
 
-    Translating theoretical knowledge of elliptic curve cryptography into working code, base on this post [Elliptic Curve Cryptography: a gentle introduction](https://andrea.corbellini.name/2015/05/17/elliptic-curve-cryptography-a-gentle-introduction/).
+    Translating theoretical knowledge of elliptic curve cryptography into working code, based on this post [Elliptic Curve Cryptography: a gentle introduction](https://andrea.corbellini.name/2015/05/17/elliptic-curve-cryptography-a-gentle-introduction/).
 
 - **Rust Language Study**
 
-    **Rust is becoming the preferred language in the crpytography domain** due to its unique combination of **memory safety**, **performance**, and **type safety**.
+    **Rust is becoming the preferred language in the cryptography domain** due to its unique combination of **memory safety**, **performance**, and **type safety**.
     
     This project serves as a comprehensive way to learn Rust by implementing a substantial cryptographic system.
 
